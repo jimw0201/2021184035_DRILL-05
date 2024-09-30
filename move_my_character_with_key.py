@@ -1,3 +1,5 @@
+# 2DGP(01반) 2021184035 지민우
+
 from pico2d import *
 
 open_canvas(1280, 1024)
