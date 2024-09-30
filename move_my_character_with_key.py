@@ -41,6 +41,10 @@ flip = False        # 좌우 반전
 dir_x = 0
 dir_y = 0
 
+# 캐릭터의 크기
+character_width = 200
+character_height = 200
+
 while running:
     clear_canvas()
     ground.draw(640, 512)
@@ -60,15 +64,27 @@ while running:
 
     # 좌우 반전 여부에 따라 이미지 그리기
     if flip:
-        character.clip_composite_draw(frame * 200, dir_frame, 200, 200, 0, 'h', x, y, 200, 200)
+        character.clip_composite_draw(frame * 200, dir_frame, 200, 200, 0, 'h', x, y, character_width, character_height)
     else:
-        character.clip_draw(frame * 200, dir_frame, 200, 200, x, y)
+        character.clip_draw(frame * 200, dir_frame, character_width, character_height, x, y)
 
     update_canvas()
     handle_events()
 
-    x += dir_x * 5
-    y += dir_y * 5
+    # 화면 경계 체크
+    if x + dir_x * 5 > 1280 - (character_width // 2) + 100:  # 오른쪽 끝에 도달했을 때
+        x = 1280 - (character_width // 2) + 100
+    elif x + dir_x * 5 < (character_width // 2) - 100:  # 왼쪽 끝에 도달했을 때
+        x = (character_width // 2) - 100
+    else:
+        x += dir_x * 5
+
+    if y + dir_y * 5 > 1024 - (character_height // 2) + 100:  # 윗쪽 끝에 도달했을 때
+        y = 1024 - (character_height // 2) + 100
+    elif y + dir_y * 5 < (character_height // 2) - 100:  # 아랫쪽 끝에 도달했을 때
+        y = (character_height // 2) - 100
+    else:
+        y += dir_y * 5
 
     frame = (frame + 1) % 8
     delay(0.05)
